@@ -4,6 +4,16 @@
     <title>Spring Boot PUCCAMP</title>
 </head>
 <body>
+<form method="post" th:object="${student}" th:action="@{/students/{id}/addFriend(id=${student.id})}">
+        <input type="text" placeholder="Nome" id="fullName" name="fullName"/>
+        <button type="submit">Adicionar amigo</button>
+    </form>
 
+    <p>Lista de amigos:</p>
+    <ul>
+        <li th:each="student : ${student.friends}">
+            <p th:text="${student.fullName}"></p>
+        </li>
+    </ul>
 </body>
 </html>

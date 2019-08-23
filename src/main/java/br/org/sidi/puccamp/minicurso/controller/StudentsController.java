@@ -29,11 +29,18 @@ public class StudentsController {
 
     @GetMapping("/{id}")
     public ModelAndView show(@PathVariable("id") Long id) {
-
+        ModelAndView modelAndView = new ModelAndView("students/show");
+        modelAndView.addObject("student", studentsRepository.findById(id).get());
+        return modelAndView;
     }
 
     @PostMapping("/{id}/addFriend")
     public String addFriend(@PathVariable("id") Long id, @RequestParam("fullName") String friendName) {
+        Student user = studentsRepository.findById(id).get();
+        Student friend = studentsRepository.findByFullName(friendName);
+        user.getFriends().add(friend);
+        studentsRepository.save(user);
+        return "redirect:/students/" + id;
 
     }
 }

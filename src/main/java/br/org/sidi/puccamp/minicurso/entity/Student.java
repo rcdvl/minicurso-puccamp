@@ -17,6 +17,11 @@ public class Student {
             joinColumns = @JoinColumn(name = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "friendId"))
     private Set<Student> friends;
+    @ManyToMany
+    @JoinTable(name = "friends",
+            joinColumns = @JoinColumn(name = "friendId"),
+            inverseJoinColumns = @JoinColumn(name = "studentId"))
+    private Set<Student> friendOf;
 
     public Student() {
     }
@@ -47,5 +52,13 @@ public class Student {
 
     public void setFriends(Set<Student> friends) {
         this.friends = friends;
+    }
+
+    public Set<Student> getFriendOf() {
+        return friendOf;
+    }
+
+    public void setFriendOf(Set<Student> friendOf) {
+        this.friendOf = friendOf;
     }
 }
