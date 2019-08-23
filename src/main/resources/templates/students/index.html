@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Spring Boot PUCCAMP</title>
 </head>
 
 <body>
+    <form method="post" th:object="${student}" th:action="@{/students}">
+        <input type="text" placeholder="Nome" th:field="*{fullName}"/>
+        <button type="submit">Adicionar</button>
+    </form>
+
     <p>Lista de alunos:</p>
     <ul>
         <li th:each="student : ${students}">

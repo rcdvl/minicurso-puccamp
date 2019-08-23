@@ -1,9 +1,7 @@
 package br.org.sidi.puccamp.minicurso.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -13,6 +11,12 @@ public class Student {
 
     @Column(nullable = false, unique = true)
     private String fullName;
+
+    @ManyToMany
+    @JoinTable(name = "friends",
+            joinColumns = @JoinColumn(name = "studentId"),
+            inverseJoinColumns = @JoinColumn(name = "friendId"))
+    private Set<Student> friends;
 
     public Student() {
     }
@@ -35,5 +39,13 @@ public class Student {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public Set<Student> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<Student> friends) {
+        this.friends = friends;
     }
 }
