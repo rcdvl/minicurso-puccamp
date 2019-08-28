@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -24,7 +25,16 @@ public class StudentsIntegrationTests {
     @Test
     public void shouldAddAndListStudents() throws Exception {
         MockHttpServletRequestBuilder addRequest = post("/students")
-                .param("fullName", "Test Student");
+                .param("fullName", "Test Student")
+                .with(csrf());
+        MockHttpServletRequestBuilder loginRequest = post("/login")
+                .param("username", "admin")
+                .param("password", "password")
+                .with(csrf());
+
+        mockMvc.perform(loginRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/students"));
 
         mockMvc.perform(addRequest)
                 .andExpect(status().is3xxRedirection())

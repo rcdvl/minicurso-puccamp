@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
 <head>
     <title>Spring Boot PUCCAMP</title>
 </head>
 
 <body>
-    <form method="post" th:object="${student}" th:action="@{/students}">
-        <input type="text" placeholder="Nome" th:field="*{fullName}"/>
-        <button type="submit">Adicionar</button>
-    </form>
+<div layout:fragment="content">
+    <div sec:authorize="hasRole('ROLE_ADMIN')" class="card">
+        <div class="card-content row">
+            <form method="post" th:object="${student}" th:action="@{/students}">
+                <div class="input-field col s10"><input type="text" th:field="*{fullName}"/><label for="fullName">Nome</label></div>
+                <div class="input-field col s2"><button type="submit" class="btn">Adicionar</button></div>
+            </form>
+        </div>
+    </div>
 
-    <p>Lista de alunos:</p>
-    <ul>
-        <li th:each="student : ${students}">
-            <p th:text="${student.fullName}"></p>
-        </li>
-    </ul>
+    <h4>Lista de alunos</h4>
+    <table>
+        <thead>
+        <tr><th>Nome</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.fullName}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

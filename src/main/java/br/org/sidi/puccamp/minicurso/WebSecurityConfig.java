@@ -17,12 +17,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        http
+                .authorizeRequests()
+                    .antMatchers("/", "/welcome", "/webjars/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/students").permitAll()
+                    .antMatchers(HttpMethod.POST, "/students").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+                .and()
+                    .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/students")
+                .and()
+                    .logout()
+                    .logoutSuccessUrl("/students")
+                    .permitAll();
     }
 
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
+        UserDetails user =
+                User.withDefaultPasswordEncoder()
+                        .username("user")
+                        .password("password")
+                        .roles("USER")
+                        .build();
 
+        UserDetails admin =
+                User.withDefaultPasswordEncoder()
+                        .username("admin")
+                        .password("password")
+                        .roles("ADMIN")
+                        .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }

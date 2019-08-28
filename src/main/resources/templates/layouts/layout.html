@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Spring Boot PUCCAMP</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link th:href="@{/webjars/materializecss/1.0.0/css/materialize.min.css}" rel="stylesheet" media="screen"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+<nav class="purple darken-4">
+    <div class="nav-wrapper container">
+        <a href="#" class="brand-logo">Spring Boot</a>
+        <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a th:href="@{/welcome}">Welcome</a></li>
+            <li><a th:href="@{/students}">Students</a></li>
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">Login</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a class="dropdown-trigger" href="#!" data-target="user-dropdown">
+                    <span th:text="${#authentication.name}"></span>
+                    <i class="material-icons right">arrow_drop_down</i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<ul class="sidenav" id="mobile-menu">
+    <li><a th:href="@{/welcome}">Welcome</a></li>
+    <li><a th:href="@{/students}">Students</a></li>
+    <li sec:authorize="isAnonymous()">
+        <a th:href="@{/login}">Login</a>
+    </li>
+    <li><a onclick="document.getElementById('sign-out-form').submit();">Sair</a></li>
+</ul>
+<form id="sign-out-form" th:action="@{/logout}" method="post" style="display: none;">
+    <a onclick="document.getElementById('sign-out-form').submit();">Sair</a>
+</form>
+<ul class="dropdown-content" id="user-dropdown">
+    <li>
+        <a onclick="document.getElementById('sign-out-form').submit();">Sair</a>
+    </li>
+</ul>
+<div class="container section">
+    <div layout:fragment="content"></div>
+</div>
+<script th:src="@{/webjars/materializecss/1.0.0/js/materialize.min.js}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, null);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    var instances = M.Dropdown.init(elems, null);
+  });
+
+</script>
+</body>
+</html>
